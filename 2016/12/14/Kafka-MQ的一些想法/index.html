@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>study | Wicky&#39;s Blog</title>
+  <title>Kafka MQ的一些想法 | Wicky&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Stay Hungry. Stay Foolish.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="study">
-<meta property="og:url" content="http://yoursite.com/study/index.html">
+  <meta name="description" content="&amp;#x80CC;&amp;#x666F;&amp;#x5728;&amp;#x516C;&amp;#x53F8;&amp;#x7CFB;&amp;#x7EDF;&amp;#x67B6;&amp;#x6784;&amp;#x53D1;&amp;#x5C55;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6709;&amp;#x82E5;&amp;#x5E72;&amp;#x573A;&amp;#x666F;&amp;#x9700;&amp;#x8981;&amp;#x53EF;&amp;#x9760;&amp;#x7684;&amp;#x961F;&amp;#x5217;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka MQ的一些想法">
+<meta property="og:url" content="http://yoursite.com/2016/12/14/Kafka-MQ的一些想法/index.html">
 <meta property="og:site_name" content="Wicky's Blog">
-<meta property="og:description" content="Stay Hungry. Stay Foolish.">
-<meta property="og:updated_time" content="2016-12-11T12:43:46.000Z">
+<meta property="og:description" content="&amp;#x80CC;&amp;#x666F;&amp;#x5728;&amp;#x516C;&amp;#x53F8;&amp;#x7CFB;&amp;#x7EDF;&amp;#x67B6;&amp;#x6784;&amp;#x53D1;&amp;#x5C55;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6709;&amp;#x82E5;&amp;#x5E72;&amp;#x573A;&amp;#x666F;&amp;#x9700;&amp;#x8981;&amp;#x53EF;&amp;#x9760;&amp;#x7684;&amp;#x961F;&amp;#x5217;">
+<meta property="og:image" content="http://yoursite.com/2016/12/14/Kafka-MQ的一些想法/Kafka.png">
+<meta property="og:updated_time" content="2016-12-13T16:52:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="study">
-<meta name="twitter:description" content="Stay Hungry. Stay Foolish.">
+<meta name="twitter:title" content="Kafka MQ的一些想法">
+<meta name="twitter:description" content="&amp;#x80CC;&amp;#x666F;&amp;#x5728;&amp;#x516C;&amp;#x53F8;&amp;#x7CFB;&amp;#x7EDF;&amp;#x67B6;&amp;#x6784;&amp;#x53D1;&amp;#x5C55;&amp;#x4E2D;&amp;#xFF0C;&amp;#x6709;&amp;#x82E5;&amp;#x5E72;&amp;#x573A;&amp;#x666F;&amp;#x9700;&amp;#x8981;&amp;#x53EF;&amp;#x9760;&amp;#x7684;&amp;#x961F;&amp;#x5217;">
+<meta name="twitter:image" content="http://yoursite.com/2016/12/14/Kafka-MQ的一些想法/Kafka.png">
   
     <link rel="alternative" href="/atom.xml" title="Wicky&#39;s Blog" type="application/atom+xml">
   
@@ -148,25 +150,84 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-undefined" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-Kafka-MQ的一些想法" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      study
+      Kafka MQ的一些想法
     </h1>
   
 
-        <a href="/study/index.html" class="archive-article-date">
-  	<time datetime="2016-12-11T12:43:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-11</time>
+        <a href="/2016/12/14/Kafka-MQ的一些想法/" class="archive-article-date">
+  	<time datetime="2016-12-13T16:23:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-14</time>
 </a>
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="&#x80CC;&#x666F;"><a href="#&#x80CC;&#x666F;" class="headerlink" title="&#x80CC;&#x666F;"></a>&#x80CC;&#x666F;</h2><p>&#x5728;&#x516C;&#x53F8;&#x7CFB;&#x7EDF;&#x67B6;&#x6784;&#x53D1;&#x5C55;&#x4E2D;&#xFF0C;&#x6709;&#x82E5;&#x5E72;&#x573A;&#x666F;&#x9700;&#x8981;&#x53EF;&#x9760;&#x7684;&#x961F;&#x5217;&#x670D;&#x52A1;&#x6765;&#x51FA;&#x4F20;&#x9012;&#x6570;&#x636E;&#x6216;&#x6D88;&#x606F;&#xFF0C;&#x8FD9;&#x4E9B;&#x573A;&#x666F;&#x53EF;&#x80FD;&#x6709;:</p>
+<ul>
+<li>&#x7CFB;&#x7EDF;&#x7684;&#x6570;&#x636E;&#x540C;&#x6B65;&#xFF0C;&#x5982;&#x4FDD;&#x5B58;&#x5728;redis&#x4E2D;&#x7684;&#x6570;&#x636E;&#xFF0C;&#x9700;&#x8981;&#x843D;&#x5730;&#x5230;Mysql&#x4E2D;&#xFF0C;&#x4E3A;&#x4E86;&#x4FDD;&#x8BC1;&#x6027;&#x80FD;&#x53EF;&#x6269;&#x5C55;&#x6027;&#xFF0C;&#x901A;&#x8FC7;&#x6D88;&#x606F;&#x961F;&#x5217;&#x6765;&#x6267;&#x884C;&#x6570;&#x636E;&#x7684;&#x843D;&#x5730;&#x64CD;&#x4F5C;&#x3002;</li>
+<li>&#x8DE8;&#x7CFB;&#x7EDF;&#x95F4;&#x7684;&#x6570;&#x636E;&#x540C;&#x6B65;&#xFF0C;&#x5982;&#x5185;&#x5BB9;&#x4ED3;&#x5E93;&#x4E2D;&#x65B0;&#x589E;&#x3001;&#x4FEE;&#x6539;&#x3001;&#x5220;&#x9664;&#x64CD;&#x4F5C;&#x5BFC;&#x81F4;&#x5404;&#x4E2A;&#x7CFB;&#x7EDF;&#x95F4;&#x6570;&#x636E;&#x7684;&#x53D8;&#x5316;</li>
+<li>&#x4E8B;&#x4EF6;&#x7684;&#x5F02;&#x6B65;&#x5904;&#x7406;&#xFF0C;&#x5982;&#x4E00;&#x4E9B;&#x7EDF;&#x8BA1;&#x76F8;&#x5173;&#x7684;&#x6570;&#x636E;</li>
+</ul>
+<p>&#x7EFC;&#x5408;&#x4E0A;&#x9762;&#x7684;&#x4E00;&#x4E9B;&#x573A;&#x666F;&#xFF0C;&#x6D88;&#x606F;&#x961F;&#x5217;&#x53EF;&#x4EE5;&#x62BD;&#x8C61;&#x6210;&#x4E0B;&#x9762;&#x8FD9;&#x6837;&#xFF1A;</p>
+<ul>
+<li>&#x9AD8;&#x53EF;&#x7528;&#xFF0C;&#x6D88;&#x606F;&#x961F;&#x5217;&#x670D;&#x52A1;&#x5E94;&#x8BE5;&#x4FDD;&#x6301;&#x5C3D;&#x53EF;&#x80FD;&#x9AD8;&#x7684;&#x53EF;&#x7528;&#x6027;&#xFF0C;&#x5C24;&#x5176;&#x662F;&#x5199;&#x6D88;&#x606F;&#x7684;&#x64CD;&#x4F5C;</li>
+<li>&#x4F4E;&#x5EF6;&#x8FDF;&#xFF0C;&#x5355;&#x6B21;&#x5199;&#x961F;&#x5217;&#x7684;&#x64CD;&#x4F5C;&#x5728;1ms&#x5185;&#x5B8C;&#x6210;&#xFF0C;&#x4EE5;&#x63D0;&#x9AD8;&#x541E;&#x5410;&#x91CF;</li>
+<li>&#x53EF;&#x6269;&#x5C55;&#xFF0C;&#x5F53;&#x591A;&#x4E2A;&#x4E1A;&#x52A1;&#x63A5;&#x5165;&#x65F6;&#xFF0C;&#x968F;&#x7740;&#x6D88;&#x606F;&#x91CF;&#x7684;&#x589E;&#x957F;&#xFF0C;&#x5E94;&#x5F53;&#x4FDD;&#x6301;&#x76F8;&#x5BF9;&#x5BB9;&#x6613;&#x7684;&#x6269;&#x5C55;&#x5E76;&#x4E14;&#x5BF9;&#x4E0A;&#x4E0B;&#x6E38;&#x7684;&#x900F;&#x660E;&#x7684;&#x3002;</li>
+<li>&#x6D88;&#x606F;&#x7684;&#x5B89;&#x5168;&#x6027;&#xFF0C;&#x4FDD;&#x8BC1;&#x6D88;&#x606F;&#x4E0D;&#x4E22;&#x5931;&#x5E76;&#x4E14;&#x53EF;&#x4EE5;&#x56DE;&#x5F52;(&#x56DE;&#x6E90;&#x65F6;&#x95F4;&#x53EF;&#x63A7;&#xFF0C;&#x4E00;&#x5468;&#x4EE5;&#x5185;)</li>
+<li>&#x63A5;&#x5165;&#x6210;&#x672C;&#x4F4E;&#xFF0C;&#x5BF9;&#x8BED;&#x8A00;&#x65E0;&#x8981;&#x6C42;(&#x901A;&#x8FC7;HTTP&#x534F;&#x8BAE;)</li>
+</ul>
+<a id="more"></a>    
+<h2 id="&#x7CFB;&#x7EDF;&#x8BBE;&#x8BA1;"><a href="#&#x7CFB;&#x7EDF;&#x8BBE;&#x8BA1;" class="headerlink" title="&#x7CFB;&#x7EDF;&#x8BBE;&#x8BA1;"></a>&#x7CFB;&#x7EDF;&#x8BBE;&#x8BA1;</h2><h3 id="RedisQueue"><a href="#RedisQueue" class="headerlink" title="RedisQueue"></a>RedisQueue</h3><ul>
+<li>supervise&#x811A;&#x672C;&#xFF0C;&#x91CD;&#x542F;&#x673A;&#x5668;&#x6216;&#x811A;&#x672C;&#x8981;&#x91CD;&#x65B0;reload</li>
+<li>redis&#x4FDD;&#x5B58;&#x5185;&#x5B58;&#xFF0C;&#x6CA1;&#x6709;&#x6301;&#x4E45;&#x5316;&#x5230;&#x78C1;&#x76D8;&#xFF0C;&#x65AD;&#x7535;&#x53EF;&#x80FD;&#x5BFC;&#x81F4;&#x4E22;&#x6570;&#x636E;&#xFF0C;&#x53EF;&#x9760;&#x6027;&#x5DEE;</li>
+<li>pub/sub ,&#x591A;&#x5199;,&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x901A;&#x77E5;&#x591A;&#x4E2A;&#x4E1A;&#x52A1;&#x65B9;&#xFF0C;&#x4E0A;&#x4E0B;&#x6E38;&#x8026;&#x5408;&#x4E25;&#x91CD;&#xFF0C;&#x91CD;&#x590D;&#x6570;&#x636E;&#x63A8;&#x5230;&#x591A;&#x4E2A;redis queue&#x4E2D;</li>
+<li>&#x2026;..</li>
+</ul>
+<h3 id="KafkaQueue"><a href="#KafkaQueue" class="headerlink" title="KafkaQueue"></a>KafkaQueue</h3><p><img src="/2016/12/14/Kafka-MQ&#x7684;&#x4E00;&#x4E9B;&#x60F3;&#x6CD5;/Kafka.png" alt="logo"><br>&#x8BF4;&#x660E;&#xFF1A;</p>
+<ul>
+<li>MqProxy</li>
+</ul>
+<p>&#x5404;&#x4E0A;&#x6E38;&#x5B50;&#x7CFB;&#x7EDF;&#xFF08;&#x5982;&#x8BA2;&#x5355;&#x7CFB;&#x7EDF;)&#xFF0C;&#x901A;&#x8FC7;&#x7EDF;&#x4E00;&#x7684;MqProxy&#x6765;&#x63D0;&#x4EA4;&#x6D88;&#x606F;&#x3002;</p>
+<p>MqProxy&#x63D0;&#x4F9B;HTTP&#x63A5;&#x53E3;&#xFF0C;&#x4E0A;&#x6E38;&#x63D0;&#x4EA4;&#x6D88;&#x606F;&#x65F6;&#xFF0C;&#x58F0;&#x660E;Topic&#x548C;&#x6D88;&#x606F;&#x5185;&#x5BB9;&#x3002;</p>
+<p>MqProxy&#x548C;Zookeeper&#x4FDD;&#x6301;&#x957F;&#x8FDE;&#x63A5;&#xFF0C;&#x4EE5;&#x52A0;&#x901F;&#xFF08;&#x5B9E;&#x6D4B;PHP&#x8BBF;&#x95EE;Zk&#x5927;&#x6982;&#x6709;10-20ms&#x7684;&#x8017;&#x65F6;&#xFF09;&#x3002;</p>
+<p>MqProxy&#x5904;&#x7406;&#x6D88;&#x606F;&#x7684;&#x5206;&#x533A;&#xFF0C;&#x5728;&#x63D0;&#x4EA4;&#x6D88;&#x606F;&#x7ED9;MqProxy&#x65F6;&#xFF0C;&#x540C;&#x65F6;&#x63D0;&#x4F9B;Partition Key&#x3002;</p>
+<ul>
+<li>Producer</li>
+</ul>
+<p>MqProxy&#x4F5C;&#x4E3A;Producer&#x5C06;&#x6D88;&#x606F;&#x63D0;&#x4EA4;&#x5230;Kafka&#x3002;</p>
+<ul>
+<li>Broker</li>
+</ul>
+<p>&#x53C2;&#x8003;Kafka&#x7684;&#x7CFB;&#x7EDF;&#x67B6;&#x6784;&#xFF0C;Broker&#x90E8;&#x5206;&#x63D0;&#x4F9B;&#x5BF9;&#x67D0;&#x4E2A;Topic&#x7684;Partation&#x548C;Replica&#x673A;&#x5236;&#xFF0C;&#x5373;&#x6BCF;&#x4E00;&#x4E2A;Topic&#x7684;&#x6570;&#x636E;&#xFF0C;&#x90FD;&#x53EF;&#x6309;&#x67D0;&#x4E2A;&#x4E3B;&#x952E;&#x8FDB;&#x884C;&#x5206;&#x7247;&#xFF0C;&#x5E76;&#x652F;&#x6301;&#x591A;&#x4E2A;&#x526F;&#x672C;,Replication&#x4FDD;&#x6301;&#x6570;&#x636E;&#x5907;&#x4EFD;&#x3002;</p>
+<p>Broker&#x9700;&#x8981;&#x5B9E;&#x73B0;Leader&#x9009;&#x4E3E;&#x673A;&#x5236;&#xFF0C;&#x5E76;&#x901A;&#x8FC7;&#x548C;Zookeeper&#x4FDD;&#x5B58;&#x5404;Topic/Partation&#x7684;Leader&#x3002;</p>
+<p>Producer&#x548C;Broker&#x4EA4;&#x4E92;&#x4E4B;&#x524D;&#xFF0C;&#x901A;&#x8FC7;Zookeeper&#x83B7;&#x5F97;&#x5BF9;&#x5E94;Leader&#xFF0C;&#x800C;&#x540E;&#x8FDB;&#x884C;&#x4EA4;&#x4E92;&#x3002;</p>
+<p>Broker&#x652F;&#x6301;&#x53EF;&#x6269;&#x5C55;&#x3002;</p>
+<ul>
+<li>Consumer</li>
+</ul>
+<p>Consumer&#x53EF;&#x652F;&#x6301;&#x961F;&#x5217;&#x670D;&#x52A1;&#x672C;&#x8EAB;&#x7684;Consumer&#x673A;&#x5236;(Pull Offset)&#x3002;</p>
+<p>&#x7136;&#x800C;&#xFF0C;&#x73B0;&#x5728;&#x7684;&#x7CFB;&#x7EDF;&#xFF0C;&#x5927;&#x90E8;&#x5206;&#x662F;PHP&#x8FD9;&#x6837;&#x7684;&#x7CFB;&#x7EDF;&#xFF0C;&#x5E76;&#x4E0D;&#x662F;&#x901A;&#x8FC7;deamon&#x65B9;&#x5F0F;&#x8FD0;&#x884C;&#x7684;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;Pusher&#x673A;&#x5236;&#xFF0C;&#x4F7F;&#x5F97;&#x6D88;&#x606F;&#x7684;&#x6D88;&#x8D39;&#x4ECE;&#x62C9;&#x6A21;&#x578B;&#x53D8;&#x4E3A;&#x63A8;&#x6A21;&#x578B;&#xFF0C;&#x4F7F;&#x5F97;&#x4E0B;&#x6E38;&#x9700;&#x8981;&#x63A5;&#x53D7;&#x6D88;&#x606F;&#x7684;&#x5B50;&#x7CFB;&#x7EDF;&#xFF0C;&#x66F4;&#x4F4E;&#x6210;&#x672C;&#x7684;&#x63A5;&#x5165;&#x3002;</p>
+<p>&#x56E0;&#x6B64;&#xFF0C;&#x6211;&#x4EEC;&#x5B9E;&#x73B0;&#x4E00;&#x5957;Push Consumer&#x673A;&#x5236;&#x3002;</p>
+<ul>
+<li>Pusher Consumer</li>
+</ul>
+<p>Pusher Consumer&#x662F;&#x53EF;&#x914D;&#x7F6E;&#x7684;&#x5E38;&#x9A7B;&#x670D;&#x52A1;&#xFF0C;&#x53EF;&#x6307;&#x5B9A;Topic-&gt;url&#xFF0C;&#x652F;&#x6301;&#x591A;&#x4E2A;&#x3002;</p>
+<p>&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x4E3E;&#x4F8B;&#xFF1A;</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">{</div><div class="line">    &quot;consumer_groups&quot;: [                //support multi callback url</div><div class="line">        {</div><div class="line">            &quot;worker_num&quot;: 16,</div><div class="line">            &quot;url&quot;: &quot;http://localhost&quot;,  //callback url</div><div class="line">            &quot;retry_times&quot;: 4,           //will retry if the callback request response non 200 code</div><div class="line">            &quot;bypass_failed&quot;:true,       //auto jump to next if single message were processed failed,set to false if service need to process message exactlly</div><div class="line">            &quot;failed_sleep&quot;:&quot;5s&quot;,       //when bypass_failed set to true,sleep this time before retry</div><div class="line">            &quot;timeout&quot;: &quot;3s&quot;,            //the callback time</div><div class="line">            &quot;topics&quot;: [                 //topic(s) consumed</div><div class="line">                &quot;test&quot;</div><div class="line">            ],</div><div class="line">            &quot;zookeepers&quot;: [             //zookeeper hosts</div><div class="line">                &quot;127.0.0.1:2181&quot;</div><div class="line">            ],</div><div class="line">        }</div><div class="line">    ]</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>pusher consumer&#x4F1A;&#x5C06;&#x6D88;&#x606F;&#x6709;&#x5E8F;&#x63A8;&#x9001;&#x5230;&#x4E0B;&#x6E38;&#x7CFB;&#x7EDF;&#xFF0C;&#x5404;&#x4E2A;&#x4E0B;&#x6E38;&#x7CFB;&#x7EDF;&#x90FD;&#x80FD;&#x591F;&#x62FF;&#x5230;&#x6240;&#x6709;&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x81EA;&#x884C;&#x8FDB;&#x884C;&#x5904;&#x7406;&#xFF0C;&#x4E14;&#x8FDB;&#x5EA6;&#x5404;&#x81EA;&#x72EC;&#x7ACB;&#xFF0C;&#x4E92;&#x4E0D;&#x5F71;&#x54CD;&#x3002;</p>
+<p>pusher consumer&#x901A;&#x8FC7;zookeeper&#x4FDD;&#x5B58;&#x5404;&#x4E2A;&#x4E0B;&#x6E38;&#x5F53;&#x524D;&#x7684;&#x547D;&#x4EE4;&#x70B9;&#xFF0C;&#x56E0;&#x6B64;&#x4E5F;&#x662F;&#x65E0;&#x72B6;&#x6001;&#x7684;&#x3002;</p>
+<ul>
+<li>http callback</li>
+</ul>
+<p>&#x4E0B;&#x6E38;&#x63A5;&#x53D7;&#x6D88;&#x606F;&#x7684;&#x63A5;&#x53E3;&#xFF0C;&#x63D0;&#x4F9B;&#x7EDF;&#x4E00;&#x7684;&#x6D88;&#x606F;&#x63A5;&#x53D7;&#x683C;&#x5F0F;&#x3002;</p>
+<p>&#x540C;&#x65F6;&#xFF0C;&#x7531;&#x4E8E;Pusher Consumer&#x91C7;&#x7528;at least once&#x7684;&#x65B9;&#x5F0F;&#xFF08;&#x5373;&#x6D88;&#x606F;&#x81F3;&#x5C11;&#x4F20;&#x8F93;&#x4E00;&#x6B21;&#xFF0C;&#x7531;&#x4E8E;&#x7F51;&#x7EDC;&#x7B49;&#x539F;&#x56E0;&#x5BFC;&#x81F4;&#x7684;&#x8D85;&#x65F6;&#x6216;&#x51FA;&#x9519;&#xFF0C;pusher&#x4F1A;&#x81EA;&#x52A8;&#x91CD;&#x53D1;&#x76F4;&#x5230;&#x8D85;&#x8FC7;retry&#x6B21;&#x6570;&#x6216;&#x8005;&#x8FD4;&#x56DE;&#x6210;&#x529F;&#xFF09;&#xFF0C;&#x5EFA;&#x8BAE;&#x4E0B;&#x6E38;&#x7684;&#x63A5;&#x53E3;&#x662F;&#x5E42;&#x7B49;&#xFF0C;&#x5373;&#x591A;&#x6B21;&#x8C03;&#x7528;&#x4E5F;&#x4E0D;&#x4F1A;&#x4F7F;&#x5F97;&#x72B6;&#x6001;&#x9519;&#x8BEF;&#x3002;</p>
+
       
 
       
@@ -195,7 +256,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kafka/">Kafka</a></li></ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+	<i class="icon-book icon"></i>
+	<a class="article-category-link" href="/categories/编程/">编程</a>
+	</div>
+
 
       
 
@@ -245,7 +316,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/study/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/12/14/Kafka-MQ的一些想法/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -257,6 +328,16 @@
 </article>
 
   
+<nav id="article-nav">
+  
+  
+    <a href="/2016/12/12/马来有趣的一些事儿/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">马来有趣的一些事儿</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 
 
@@ -264,7 +345,7 @@
   
   <section id="comments">
     <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="page-undefined" data-title="study" data-url="http://yoursite.com/study/index.html"></div>
+    <div class="ds-thread" data-thread-key="post-Kafka-MQ的一些想法" data-title="Kafka MQ的一些想法" data-url="http://yoursite.com/2016/12/14/Kafka-MQ的一些想法/"></div>
     <!-- 多说评论框 end -->
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
     <script type="text/javascript">
@@ -302,7 +383,7 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
