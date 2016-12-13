@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/12/11/解决gitlab、github多账户生成rsa-key覆盖的问题/index.html">
 <meta property="og:site_name" content="Wicky's Blog">
 <meta property="og:description" content="&amp;#x7531;&amp;#x4E8E;&amp;#x516C;&amp;#x53F8;&amp;#x4F7F;&amp;#x7528;&amp;#x7684;&amp;#x662F;gitlab&amp;#xFF0C;&amp;#x4F1A;&amp;#x4F7F;&amp;#x7528;ssh-keygen &amp;#x751F;&amp;#x6210;rsakey,&amp;#x540C;&amp;#x65F6;&amp;#x4F7F;&amp;#x7528;github&amp;#x7684;&amp;#x65F6;&amp;#x5019;&amp;#">
-<meta property="og:updated_time" content="2016-12-11T13:21:23.000Z">
+<meta property="og:updated_time" content="2016-12-13T16:11:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解决gitlab、github多账户生成rsa key覆盖的问题">
 <meta name="twitter:description" content="&amp;#x7531;&amp;#x4E8E;&amp;#x516C;&amp;#x53F8;&amp;#x4F7F;&amp;#x7528;&amp;#x7684;&amp;#x662F;gitlab&amp;#xFF0C;&amp;#x4F1A;&amp;#x4F7F;&amp;#x7528;ssh-keygen &amp;#x751F;&amp;#x6210;rsakey,&amp;#x540C;&amp;#x65F6;&amp;#x4F7F;&amp;#x7528;github&amp;#x7684;&amp;#x65F6;&amp;#x5019;&amp;#">
@@ -167,7 +167,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>&#x7531;&#x4E8E;&#x516C;&#x53F8;&#x4F7F;&#x7528;&#x7684;&#x662F;gitlab&#xFF0C;&#x4F1A;&#x4F7F;&#x7528;ssh-keygen &#x751F;&#x6210;rsakey,&#x540C;&#x65F6;&#x4F7F;&#x7528;github&#x7684;&#x65F6;&#x5019;&#x4E5F;&#x8981;&#x751F;&#x6210;rsa-key,&#x9488;&#x5BF9;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;&#x5728;&#x751F;&#x6210;key&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x96BE;&#x514D;&#x4F1A;&#x4EA7;&#x751F;&#x8986;&#x76D6;&#xFF1A;<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Generating public/private rsa key pair.</div><div class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/Users/Wicky/.ssh/id_rsa):</div></pre></td></tr></table></figure></p>
-<p>&#x9488;&#x5BF9;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x5728;&#x751F;&#x6210;key&#x7684;&#x65F6;&#x5019;&#x6307;&#x5B9A;&#x751F;&#x6210;id_rsa_github&#x548C;id_rsa_github.pub,&#x548C;id_rsa&#x3001;rd_rsa.pub&#x533A;&#x5206;&#x5F00;&#xFF0C;<br>&#x5C06; id_rsa_github.pub &#x7684;&#x5185;&#x5BB9;&#x586B;&#x5165;github&#x7684;SSH Key&#x4E2D;&#x5373;&#x53EF;&#x3002;<br>&#x6700;&#x540E;&#x5728; ~/.ssh/ &#x4E2D;&#x521B;&#x5EFA;config&#x6587;&#x4EF6;&#xFF0C;&#x52A0;&#x4E0A;&#x4EE5;&#x4E0B;&#x51E0;&#x884C;&#x4EE3;&#x7801;:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># gitlab</span></div><div class="line">Host gitlab.com</div><div class="line">    HostName gitlab.com</div><div class="line">	PreferredAuthentications publickey</div><div class="line">	IdentityFile ~/.ssh/id_rsa</div><div class="line"></div><div class="line"><span class="comment"># github</span></div><div class="line">	Host github.com</div><div class="line">	HostName github.com</div><div class="line">	PreferredAuthentications publickey</div><div class="line">	IdentityFile ~/.ssh/id_rsa_github</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>&#x9488;&#x5BF9;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#xFF0C;&#x6211;&#x4EEC;&#x5728;&#x751F;&#x6210;key&#x7684;&#x65F6;&#x5019;&#x6307;&#x5B9A;&#x751F;&#x6210;id_rsa_github&#x548C;id_rsa_github.pub,&#x548C;id_rsa&#x3001;rd_rsa.pub&#x533A;&#x5206;&#x5F00;&#xFF0C;&#x5C06;id_rsa_github.pub &#x7684;&#x5185;&#x5BB9;&#x586B;&#x5165;github&#x7684;SSH Key&#x4E2D;&#x5373;&#x53EF;&#x3002;<br>&#x6700;&#x540E;&#x5728; ~/.ssh/ &#x4E2D;&#x521B;&#x5EFA;config&#x6587;&#x4EF6;&#xFF0C;&#x52A0;&#x4E0A;&#x4EE5;&#x4E0B;&#x51E0;&#x884C;&#x4EE3;&#x7801;:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># gitlab</span></div><div class="line">Host gitlab.com</div><div class="line">    HostName gitlab.com</div><div class="line">	PreferredAuthentications publickey</div><div class="line">	IdentityFile ~/.ssh/id_rsa</div><div class="line"></div><div class="line"><span class="comment"># github</span></div><div class="line">	Host github.com</div><div class="line">	HostName github.com</div><div class="line">	PreferredAuthentications publickey</div><div class="line">	IdentityFile ~/.ssh/id_rsa_github</div></pre></td></tr></table></figure></p>
 <p>&#x8F93;&#x5165; ssh -T git@github.com  &#x6D4B;&#x8BD5;<br>&#x6D4B;&#x8BD5;OK&#x5373;&#x53EF;</p>
 
       
@@ -365,11 +366,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)">Hexo</a>
+                <a href="javascript:void(0)">github</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)">github</a>
+                <a href="javascript:void(0)">Hexo</a>
               </li>
              
               <li class="article-tag-list-item">
