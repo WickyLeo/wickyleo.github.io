@@ -1,0 +1,844 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP,CGI,PHP-FPM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="&amp;#x4ECE;&amp;#x6BD5;&amp;#x4E1A;&amp;#x5F00;&amp;#x59CB;&amp;#x4F7F;&amp;#x7528;PHP&amp;#x4E5F;&amp;#x6709;&amp;#x63A5;&amp;#x8FD1;&amp;#x4E09;&amp;#x5E74;&amp;#x65F6;&amp;#x95F4;&amp;#xFF0C;&amp;#x5BF9;PHP&amp;#x7684;&amp;#x7406;&amp;#x89E3;&amp;#x8FD8;&amp;#x53EA;&amp;#x662F;&amp;#x505C;&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解PHP(一)">
+<meta property="og:url" content="http://yoursite.com/2017/02/20/深入理解PHP-一/index.html">
+<meta property="og:site_name" content="Wicky's Blog">
+<meta property="og:description" content="&amp;#x4ECE;&amp;#x6BD5;&amp;#x4E1A;&amp;#x5F00;&amp;#x59CB;&amp;#x4F7F;&amp;#x7528;PHP&amp;#x4E5F;&amp;#x6709;&amp;#x63A5;&amp;#x8FD1;&amp;#x4E09;&amp;#x5E74;&amp;#x65F6;&amp;#x95F4;&amp;#xFF0C;&amp;#x5BF9;PHP&amp;#x7684;&amp;#x7406;&amp;#x89E3;&amp;#x8FD8;&amp;#x53EA;&amp;#x662F;&amp;#x505C;&amp;#">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/61b18d2ajw1e8uzxhgu9dj20hc0hjtbo.jpg">
+<meta property="og:image" content="http://www.php-internals.com/images/book/chapt02/02-01-01-cgi-lift-cycle.png">
+<meta property="og:image" content="http://www.php-internals.com/images/book/chapt02/02-01-02-multiprocess-life-cycle.png">
+<meta property="og:image" content="http://www.php-internals.com/images/book/chapt02/02-01-013-multithreaded-lift-cycle.png">
+<meta property="og:updated_time" content="2017-02-19T16:25:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解PHP(一)">
+<meta name="twitter:description" content="&amp;#x4ECE;&amp;#x6BD5;&amp;#x4E1A;&amp;#x5F00;&amp;#x59CB;&amp;#x4F7F;&amp;#x7528;PHP&amp;#x4E5F;&amp;#x6709;&amp;#x63A5;&amp;#x8FD1;&amp;#x4E09;&amp;#x5E74;&amp;#x65F6;&amp;#x95F4;&amp;#xFF0C;&amp;#x5BF9;PHP&amp;#x7684;&amp;#x7406;&amp;#x89E3;&amp;#x8FD8;&amp;#x53EA;&amp;#x662F;&amp;#x505C;&amp;#">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/61b18d2ajw1e8uzxhgu9dj20hc0hjtbo.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/20/深入理解PHP-一/"/>
+
+
+
+
+
+  <title> 深入理解PHP(一) | Wicky's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Wicky's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Just Do IT.</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/20/深入理解PHP-一/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Wicky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/9361738?v=3&s=460">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Wicky's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Wicky's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                深入理解PHP(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-20T00:20:23+08:00">
+                2017-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/20/深入理解PHP-一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/20/深入理解PHP-一/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&#x4ECE;&#x6BD5;&#x4E1A;&#x5F00;&#x59CB;&#x4F7F;&#x7528;PHP&#x4E5F;&#x6709;&#x63A5;&#x8FD1;&#x4E09;&#x5E74;&#x65F6;&#x95F4;&#xFF0C;&#x5BF9;PHP&#x7684;&#x7406;&#x89E3;&#x8FD8;&#x53EA;&#x662F;&#x505C;&#x7559;&#x5728;&#x5F88;&#x8868;&#x5C42;&#x7684;&#x4F7F;&#x7528;&#x9636;&#x6BB5;&#xFF0C;&#x800C;&#x6CA1;&#x6709;&#x6DF1;&#x5165;&#x53BB;&#x4E86;&#x89E3;&#x5B83;&#x7684;&#x5185;&#x90E8;&#x8FD0;&#x884C;&#x53CA;&#x5904;&#x7406;&#x673A;&#x5236;&#x3002;&#x6240;&#x4EE5;&#x51B3;&#x5B9A;&#x5F00;&#x59CB;&#x6BCF;&#x5468;&#x82B1;&#x4E00;&#x70B9;&#x65F6;&#x95F4;&#x53BB;&#x6DF1;&#x5165;&#x7406;&#x89E3;PHP&#x7684;&#x5185;&#x6838;&#xFF0C;&#x5F53;&#x505A;&#x662F;&#x4E00;&#x4E9B;&#x81EA;&#x5DF1;&#x7684;&#x5B66;&#x4E60;&#x7B14;&#x8BB0;&#x548C;&#x603B;&#x7ED3;&#x3002;</p>
+<h2 id="&#x8FD0;&#x884C;&#x6A21;&#x5F0F;&#x53CA;&#x751F;&#x547D;&#x5468;&#x671F;"><a href="#&#x8FD0;&#x884C;&#x6A21;&#x5F0F;&#x53CA;&#x751F;&#x547D;&#x5468;&#x671F;" class="headerlink" title="&#x8FD0;&#x884C;&#x6A21;&#x5F0F;&#x53CA;&#x751F;&#x547D;&#x5468;&#x671F;"></a>&#x8FD0;&#x884C;&#x6A21;&#x5F0F;&#x53CA;&#x751F;&#x547D;&#x5468;&#x671F;</h2><h3 id="PHP&#x8FD0;&#x884C;&#x6A21;&#x5F0F;"><a href="#PHP&#x8FD0;&#x884C;&#x6A21;&#x5F0F;" class="headerlink" title="PHP&#x8FD0;&#x884C;&#x6A21;&#x5F0F;"></a>PHP&#x8FD0;&#x884C;&#x6A21;&#x5F0F;</h3><ul>
+<li>CGI&#xFF08;&#x901A;&#x7528;&#x7F51;&#x5173;&#x63A5;&#x53E3; / Common Gateway Interface&#xFF09; </li>
+<li>FastCGI&#xFF08;&#x5E38;&#x9A7B;&#x578B;CGI / Long-Live CGI&#xFF09; </li>
+<li>CLI&#xFF08;&#x547D;&#x4EE4;&#x884C;&#x8FD0;&#x884C; / Command Line Interface&#xFF09; </li>
+<li>Web&#x6A21;&#x5757;&#x6A21;&#x5F0F;&#xFF08;Apache&#x7B49;Web&#x670D;&#x52A1;&#x5668;&#x8FD0;&#x884C;&#x7684;&#x6A21;&#x5F0F;&#xFF09; </li>
+</ul>
+<a id="more"></a>
+<p><em>CGI</em>: &#x672C;&#x8D28;&#x4E0A;&#x662F;&#x4EE5;socket&#x7F16;&#x7A0B;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;TCP/UDP&#x534F;&#x8BAE;&#x7684;&#x670D;&#x52A1;&#x5668;&#xFF0C;&#x542F;&#x52A8;&#x65F6;&#x521B;&#x5EFA;TCP/UDP&#x534F;&#x8BAE;&#x7684;&#x670D;&#x52A1;&#x5668;socket&#x76D1;&#x542C;&#xFF0C;&#x5E76;&#x63A5;&#x53D7;&#x76F8;&#x5173;&#x8BF7;&#x6C42;&#x8FDB;&#x884C;&#x5904;&#x7406;&#xFF0C;&#x5E76;&#x5728;&#x6B64;&#x57FA;&#x7840;&#x4E0A;&#x6DFB;&#x52A0;&#x6A21;&#x5757;&#x7684;&#x521D;&#x59CB;&#x5316;&#x3001;sapi&#x521D;&#x59CB;&#x5316;&#x3001;&#x6A21;&#x5757;&#x5173;&#x95ED;&#x3001;sapi&#x5173;&#x95ED;&#x7B49;&#x5C31;&#x6784;&#x6210;&#x4E86;&#x6574;&#x4E2A;CGI&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#x3002;</p>
+<blockquote>
+<p>CGI&#x5168;&#x79F0;&#x662F;&#x201C;&#x901A;&#x7528;&#x7F51;&#x5173;&#x63A5;&#x53E3;&#x201D;(Common Gateway Interface)&#xFF0C;&#x5B83;&#x53EF;&#x4EE5;&#x8BA9;&#x4E00;&#x4E2A;&#x5BA2;&#x6237;&#x7AEF;&#x4ECE;&#x7F51;&#x9875;&#x6D4F;&#x89C8;&#x5668;&#x5411;&#x6267;&#x884C;&#x5728;Web&#x670D;&#x52A1;&#x5668;&#x4E0A;&#x7684;&#x7A0B;&#x5E8F;&#x8BF7;&#x6C42;&#x6570;&#x636E;&#x3002;</p>
+<p>  CGI&#x63CF;&#x8FF0;&#x4E86;&#x5BA2;&#x6237;&#x7AEF;&#x548C;&#x8FD9;&#x4E2A;&#x7A0B;&#x5E8F;&#x4E4B;&#x95F4;&#x4F20;&#x8F93;&#x6570;&#x636E;&#x7684;&#x4E00;&#x79CD;&#x6807;&#x51C6;&#x3002; </p>
+<p>  CGI&#x7684;&#x4E00;&#x4E2A;&#x76EE;&#x7684;&#x662F;&#x8981;&#x72EC;&#x7ACB;&#x4E8E;&#x4EFB;&#x4F55;&#x8BED;&#x8A00;&#x7684;&#xFF0C;&#x6240;&#x4EE5;CGI&#x53EF;&#x4EE5;&#x7528;&#x4EFB;&#x4F55;&#x4E00;&#x79CD;&#x8BED;&#x8A00;&#x7F16;&#x5199;&#xFF0C;&#x53EA;&#x8981;&#x8FD9;&#x79CD;&#x8BED;&#x8A00;&#x5177;&#x6709;&#x6807;&#x51C6;&#x8F93;&#x5165;&#x3001;&#x8F93;&#x51FA;&#x548C;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x3002;&#x5982;php,perl,tcl&#x7B49;&#x3002;</p>
+</blockquote>
+<p>&#x5B58;&#x5728;&#x7684;&#x95EE;&#x9898;&#xFF1A;</p>
+<ul>
+<li>&#x6BCF;&#x5F53;&#x6709;&#x7528;&#x6237;&#x8BF7;&#x6C42;&#xFF0C;&#x4F1A;&#x521B;&#x5EFA;CGI&#x7684;&#x5B50;&#x8FDB;&#x7A0B;&#xFF0C;&#x7136;&#x540E;&#x5904;&#x7406;&#x5B8C;&#x8BF7;&#x6C42;&#x624D;&#x4F1A;&#x7ED3;&#x675F;&#x5B50;&#x8FDB;&#x7A0B;&#x3002;&#x5F53;</li>
+<li>&#x5F53;&#x7528;&#x6237;&#x8BF7;&#x6C42;&#x6570;&#x91CF;&#x975E;&#x5E38;&#x5927;&#x4E8B;&#xFF0C;&#x4F1A;&#x5927;&#x91CF;&#x5360;&#x7528;&#x7CFB;&#x7EDF;&#x8D44;&#x6E90;&#xFF0C;&#x6BD4;&#x5982;&#x5185;&#x5B58;&#x3001;CPU&#x7B49;&#xFF0C;&#x9020;&#x6210;&#x6027;&#x80FD;&#x4F4E;&#x4E0B;&#x3002;</li>
+<li>&#x6709;&#x591A;&#x5C11;&#x5BA2;&#x6237;&#x7AEF;&#x8BF7;&#x6C42;&#x5C31;&#x4F1A;&#x521B;&#x5EFA;&#x591A;&#x5C11;&#x4E2A;CGI&#x5B50;&#x8FDB;&#x7A0B;&#xFF0C;&#x5B50;&#x8FDB;&#x7A0B;&#x53CD;&#x590D;&#x52A0;&#x8F7D;&#x662F;&#x9020;&#x6210;&#x6027;&#x80FD;&#x4F4E;&#x4E0B;&#x7684;&#x4E3B;&#x8981;&#x539F;&#x56E0;&#x3002;</li>
+</ul>
+<p>webserver&#x6536;&#x5230;&#x6D4F;&#x89C8;&#x5668;index.php&#x7684;&#x8BF7;&#x6C42;&#x4EE5;&#x540E;&#xFF0C;&#x4F1A;&#x542F;&#x52A8;&#x76F8;&#x5E94;&#x7684;CGI&#x7A0B;&#x5E8F;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;PHP&#x89E3;&#x91CA;&#x5668;&#x3002;&#x63A5;&#x4E0B;&#x6765;PHP&#x89E3;&#x91CA;&#x5668;&#x4F1A;&#x89E3;&#x6790;php.ini&#x6587;&#x4EF6;&#xFF0C;&#x52A0;&#x8F7D;&#x6A21;&#x5757;&#xFF0C;&#x521D;&#x59CB;&#x5316;&#x6267;&#x884C;&#x73AF;&#x5883;&#x7136;&#x540E;&#x5904;&#x7406;&#xFF0C;&#x6309;&#x7167;CGI&#x89C4;&#x5B9A;&#x6267;&#x884C;&#x5B8C;&#x6210;&#x540E;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;&#xFF0C;&#x7ED3;&#x675F;&#x8FDB;&#x7A0B;&#xFF0C;webserver&#x518D;&#x8FD4;&#x56DE;&#x6D4F;&#x89C8;&#x5668;&#x3002;</p>
+<p>browser-&gt;webserver-CGI/FastCGI-&gt;PHP-&gt;close CGI-&gt;webserver-&gt;browser</p>
+<p><em>FastCGI</em>&#xFF1A;&#x662F;CGI&#x7684;&#x5347;&#x7EA7;&#x7248;&#x672C;&#xFF0C;&#x50CF;&#x4E00;&#x4E2A;&#x5E38;&#x9A7B;(long live)&#x7684;CGI,&#x5B83;&#x53EF;&#x4EE5;&#x4E00;&#x76F4;&#x5728;&#x6267;&#x884C;&#xFF0C;&#x6FC0;&#x6D3B;&#x4EE5;&#x540E;&#x4E0D;&#x9700;&#x8981;&#x6BCF;&#x6B21;&#x90FD;&#x82B1;&#x65F6;&#x95F4;&#x53BB;fork&#x8FDB;&#x7A0B;&#x3002;</p>
+<p>&#x5DE5;&#x4F5C;&#x539F;&#x7406;&#xFF1A;</p>
+<ul>
+<li>webserver&#x542F;&#x52A8;&#x65F6;&#x8F7D;&#x5165;FastCGI&#x7BA1;&#x7406;&#x5668;(<em>PHP-FPM</em>)&#x3002;</li>
+<li>FastCGI&#x8FDB;&#x7A0B;&#x7BA1;&#x7406;&#x5668;&#x81EA;&#x8EAB;&#x521D;&#x59CB;&#x5316;&#xFF0C;&#x542F;&#x52A8;&#x591A;&#x4E2A;CGI&#x89E3;&#x91CA;&#x5668;&#x8FDB;&#x7A0B;&#x7B49;&#x5F85;webserver&#x8FDE;&#x63A5;&#x3002;</li>
+<li>&#x5BA2;&#x6237;&#x7AEF;&#x8BF7;&#x6C42;&#x5230;&#x8FBE;webserver&#x65F6;&#xFF0C;FastCGI&#x9009;&#x62E9;&#x4E00;&#x4E2A;CGI&#x89E3;&#x91CA;&#x5668;&#x8FDB;&#x7A0B;&#x5E76;&#x8FDE;&#x63A5;&#x3002;</li>
+<li>FastCGI&#x5B50;&#x8FDB;&#x7A0B;&#x5904;&#x7406;&#x5B8C;&#x540E;&#x5C06;&#x6807;&#x51C6;&#x8F93;&#x51FA;&#x548C;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x7531;&#x540C;&#x4E00;&#x8FDE;&#x63A5;&#x8FD4;&#x56DE;Webserver&#xFF0C;&#x5F53;&#x5173;&#x95ED;FastCGI&#x5B50;&#x8FDB;&#x7A0B;&#x8FDE;&#x63A5;&#x65F6;&#xFF0C;&#x8BF7;&#x6C42;&#x5BA3;&#x544A;&#x5B8C;&#x6210;&#x3002;FastCGI&#x7B49;&#x5F85;&#x4E0B;&#x4E00;&#x4E2A;&#x8FDE;&#x63A5;&#x3002;</li>
+<li>&#x4F7F;&#x7528;FastCGI&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x89E3;&#x6790;&#x4E00;&#x6B21;php.ini&#x6587;&#x4EF6;&#xFF0C;&#x521D;&#x59CB;&#x5316;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x4E5F;&#x53EA;&#x9700;&#x8981;&#x4E00;&#x6B21;&#xFF0C;&#x4E0D;&#x9700;&#x8981;&#x50CF;CGI&#x90A3;&#x6837;&#x6BCF;&#x6B21;&#x90FD;&#x7ECF;&#x5386;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x3002;&#x4E00;&#x4E2A;&#x597D;&#x5904;&#x6301;&#x7EED;&#x6570;&#x636E;&#x5E93;&#x8FDE;&#x63A5;&#x53EF;&#x4EE5;&#x5DE5;&#x4F5C;&#x3002;</li>
+</ul>
+<p>&#x4F18;&#x70B9;&#xFF1A;</p>
+<ul>
+<li>&#x4ECE;&#x7A33;&#x5B9A;&#x6027;&#x770B;&#xFF0C;FastCGI&#x662F;&#x4EE5;&#x72EC;&#x7ACB;&#x7684;&#x8FDB;&#x7A0B;&#x6C60;&#x6765;&#x8FD0;&#x884C;CGI&#xFF0C;&#x5355;&#x4E2A;&#x8FDB;&#x7A0B;&#x6B7B;&#x6389;&#xFF0C;&#x7CFB;&#x7EDF;&#x53EF;&#x4EE5;&#x4E22;&#x5F03;&#x5E76;&#x91CD;&#x65B0;&#x5206;&#x914D;&#x8FDB;&#x7A0B;&#x6765;&#x5904;&#x7406;&#x3002;</li>
+<li>&#x4ECE;&#x5B89;&#x5168;&#x6027;&#x770B;&#xFF0C;FastCGI&#x652F;&#x6301;&#x5206;&#x5E03;&#x5F0F;&#x8FD0;&#x7B97;&#xFF0C;&#x548C;&#x5BBF;&#x4E3B;Server&#x53EF;&#x4EE5;&#x72EC;&#x7ACB;&#xFF0C;FastCGI Down&#x4E0D;&#x4F1A;&#x5C06;Server&#x5F04;&#x57AE;&#x3002;</li>
+<li>&#x4ECE;&#x6027;&#x80FD;&#x4E0A;&#x770B;&#xFF0C;FastCGI&#x5C06;&#x52A8;&#x6001;&#x903B;&#x8F91;&#x5904;&#x7406;&#x4ECE;Server&#x4E2D;&#x5206;&#x79BB;&#x5F00;&#xFF0C;I/O&#x5904;&#x7406;&#x7559;&#x7ED9;Server&#x5904;&#x7406;&#x3002;</li>
+</ul>
+<p>&#x4E0D;&#x8DB3;&#xFF1A;</p>
+<p>&#x56E0;&#x4E3A;&#x9700;&#x8981;&#x5F00;&#x542F;&#x591A;&#x4E2A;&#x8FDB;&#x7A0B;&#xFF0C;FastCGI&#x9700;&#x8981;&#x66F4;&#x591A;&#x7684;&#x670D;&#x52A1;&#x5668;&#x5185;&#x5B58;&#xFF0C;PHP-CGI&#x8FDB;&#x7A0B;&#x89E3;&#x91CA;&#x5668;&#x9700;&#x8981;&#x6D88;&#x8017;7-25M&#x5185;&#x5B58;&#xFF0C;&#x82E5;&#x5F00;&#x542F;500&#x4E2A;&#x8FDB;&#x7A0B;&#x5219;&#x662F;&#x5F88;&#x5927;&#x7684;&#x5185;&#x5B58;&#x6570;&#x3002;</p>
+<p>Tips:</p>
+<blockquote>
+<p>&#x5982;&#x679C;php-fpm&#x7684;&#x5355;&#x4E2A;&#x5B50;&#x8FDB;&#x7A0B;&#x5360;&#x7528;&#x5185;&#x5B58;&#x4E00;&#x76F4;&#x5C45;&#x9AD8;&#x4E0D;&#x4E0B;,&#x5982;&#x56FE;<img src="http://ww4.sinaimg.cn/large/61b18d2ajw1e8uzxhgu9dj20hc0hjtbo.jpg" alt="fpm">&#x9700;&#x8981;&#x770B;php-fpm&#x7684;&#x914D;&#x7F6E;&#x4E2D;max_request&#x662F;&#x5426;&#x6253;&#x5F00;&#xFF0C;&#x4E0D;&#x5F00;&#x542F;&#x4F1A;&#x5BFC;&#x81F4;fpm&#x8FDB;&#x7A0B;&#x4E00;&#x76F4;&#x4E0D;&#x91CA;&#x653E;&#x5185;&#x5B58;&#xFF0C;&#x53EF;&#x8BBE;&#x7F6E;&#x4E3A;max_request=300-500&#xFF0C;&#x8BF7;&#x6C42;&#x6B21;&#x6570;&#x8FBE;&#x5230;&#x8FD9;&#x4E2A;&#x503C;&#x540E;php-fpm&#x8FDB;&#x7A0B;&#x8FDB;&#x884C;&#x91CD;&#x542F;&#xFF0C;&#x4FDD;&#x5B58;&#x5185;&#x5B58;&#x4E0D;&#x589E;&#x957F;&#x3002;&#x5982;&#x679C;&#x5185;&#x5B58;&#x4E0D;&#x91CA;&#x653E;&#xFF0C;&#x5BFC;&#x81F4;&#x5360;&#x7528;&#x5185;&#x5B58;&#x589E;&#x52A0;&#x4E0D;&#x591F;&#x7528;&#xFF0C;&#x4ECE;&#x800C;&#x5BFC;&#x81F4;php-fpm&#x4E0D;&#x53EF;&#x7528;&#x9020;&#x6210;nginx&#x5F00;&#x59CB;&#x62A5;502&#x3002;&#x5982;&#x679C;&#x662F;&#x95F4;&#x6B47;&#x6027;502&#x4E00;&#x822C;&#x662F;php-fpm&#x8FDB;&#x7A0B;&#x91CD;&#x542F;&#x9020;&#x6210;&#x7684;&#x3002;&#x5982;&#x679C;&#x53C2;&#x6570;&#x8BBE;&#x7F6E;&#x7684;&#x592A;&#x5C0F;&#xFF0C;&#x5BFC;&#x81F4;&#x65E0;&#x8FDB;&#x7A0B;&#x53EF;&#x7528;&#x4E5F;&#x4F1A;&#x62A5;502&#x3002;&#x8FDB;&#x7A0B;&#x5360;&#x7528;&#x5185;&#x5B58;&#x8BA1;&#x7B97;&#x65B9;&#x6CD5;(&#x5185;&#x5B58;/20M)&#x3002;</p>
+</blockquote>
+<p><em>CLI</em></p>
+<blockquote>
+<p>PHP-CLI&#x662F;PHP Command Line Interface&#x7684;&#x7B80;&#x79F0;&#xFF0C;&#x5C31;&#x662F;PHP&#x5728;&#x547D;&#x4EE4;&#x884C;&#x8FD0;&#x884C;&#x7684;&#x63A5;&#x53E3;&#xFF0C;&#x533A;&#x522B;&#x4E8E;&#x5728;Web&#x670D;&#x52A1;&#x5668;&#x4E0A;&#x8FD0;&#x884C;&#x7684;PHP&#x73AF;&#x5883;&#xFF08;PHP-CGI&#xFF0C;ISAPI&#x7B49;)&#x3002;PHP&#x7684;CLI Shell&#x811A;&#x672C;&#x9002;&#x7528;&#x4E8E;&#x6240;&#x6709;&#x7684;PHP&#x4F18;&#x52BF;&#xFF0C;&#x4F7F;&#x521B;&#x5EFA;&#x8981;&#x4E48;&#x652F;&#x6301;&#x811A;&#x672C;&#x6216;&#x7CFB;&#x7EDF;&#x751A;&#x81F3;&#x4E0E;GUI&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x7684;&#x670D;&#x52A1;&#x7AEF;&#xFF0C;&#x5728;Windows&#x548C;Linux&#x4E0B;&#x90FD;&#x662F;&#x652F;&#x6301;PHP-CLI&#x6A21;&#x5F0F;&#x7684;&#xFF0C;&#x5982;php xx.php&#x6765;&#x6267;&#x884C;&#x3002;</p>
+</blockquote>
+<h2 id="&#x5F00;&#x59CB;&#x548C;&#x7ED3;&#x675F;"><a href="#&#x5F00;&#x59CB;&#x548C;&#x7ED3;&#x675F;" class="headerlink" title="&#x5F00;&#x59CB;&#x548C;&#x7ED3;&#x675F;"></a>&#x5F00;&#x59CB;&#x548C;&#x7ED3;&#x675F;</h2><p>&#x9996;&#x5148;&#x770B;&#x4E00;&#x6BB5;&#x4EE3;&#x7801;&#xFF1A;</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	<span class="keyword">echo</span> <span class="string">&quot;hello world&quot;</span>;</div><div class="line">	$a = <span class="number">1</span>+<span class="number">1</span>;</div><div class="line">	<span class="keyword">echo</span> $a;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>&#x901A;&#x5E38;&#x6211;&#x4EEC;&#x5728;Apache&#x6216;Nginx&#x8FD9;&#x7C7B;web&#x670D;&#x52A1;&#x5668;&#x6765;&#x6D4B;&#x8BD5;PHP&#x811A;&#x672C;&#xFF0C;&#x6216;&#x8005;&#x5728;CGI&#x7684;&#x547D;&#x4EE4;&#x884C;&#x6A21;&#x5F0F;&#x4E0B;&#x6267;&#x884C;&#xFF0C;&#x811A;&#x672C;&#x6267;&#x884C;&#x5B8C;&#x540E;&#xFF0C;Web&#x670D;&#x52A1;&#x5668;&#x5E94;&#x7B54;&#xFF0C;&#x6D4F;&#x89C8;&#x5668;&#x663E;&#x793A;&#x5E94;&#x7B54;&#x4FE1;&#x606F;&#xFF0C;&#x6216;&#x8005;&#x5728;&#x547D;&#x4EE4;&#x884C;&#x6807;&#x51C6;&#x8F93;&#x51FA;&#x4E0A;&#x663E;&#x793A;&#x5185;&#x5BB9;&#x3002;&#x4EE5;CGI&#x6267;&#x884C;&#x4E3A;&#x4F8B;&#xFF0C;&#x4F1A;&#x6267;&#x884C;&#x4E0B;&#x9762;&#x7684;&#x51E0;&#x4E2A;&#x6B65;&#x9AA4;&#xFF1A;</p>
+<ul>
+<li>Scanning(Lexing) ,&#x5C06;PHP&#x4EE3;&#x7801;&#x8F6C;&#x6362;&#x4E3A;&#x8BED;&#x8A00;&#x7247;&#x6BB5;(Tokens)</li>
+<li>Parsing, &#x5C06;Tokens&#x8F6C;&#x6362;&#x6210;&#x7B80;&#x5355;&#x800C;&#x6709;&#x610F;&#x4E49;&#x7684;&#x8868;&#x8FBE;&#x5F0F;</li>
+<li>Compilation, &#x5C06;&#x8868;&#x8FBE;&#x5F0F;&#x7F16;&#x8BD1;&#x6210;Opocdes</li>
+<li>Execution, &#x987A;&#x6B21;&#x6267;&#x884C;Opcodes&#xFF0C;&#x6BCF;&#x6B21;&#x4E00;&#x6761;&#xFF0C;&#x4ECE;&#x800C;&#x5B9E;&#x73B0;PHP&#x811A;&#x672C;&#x7684;&#x529F;&#x80FD;&#x3002;</li>
+</ul>
+<blockquote>
+<p>&#x811A;&#x672C;&#x6267;&#x884C;&#x7684;&#x5F00;&#x59CB;&#x90FD;&#x662F;&#x4EE5;SAPI&#x63A5;&#x53E3;&#x5B9E;&#x73B0;&#x5F00;&#x59CB;&#x7684;&#xFF0C;&#x53EA;&#x662F;&#x4E0D;&#x540C;&#x7684;SAPI&#x63A5;&#x53E3;&#x4F1A;&#x5B9E;&#x73B0;&#x4ED6;&#x4EEC;&#x7279;&#x5B9A;&#x7684;&#x5DE5;&#x4F5C;&#xFF0C;&#x5982;Apache&#x7684;mod_php SAPI&#x5B9E;&#x73B0;&#x9700;&#x8981;&#x521D;&#x59CB;&#x5316;&#x4ECE;Apache&#x83B7;&#x53D6;&#x7684;&#x4E00;&#x4E9B;&#x4FE1;&#x606F;&#xFF0C;&#x5C06;&#x8F93;&#x51FA;&#x5185;&#x5BB9;&#x8FD4;&#x56DE;&#x7ED9;Apache&#xFF0C;&#x5176;&#x4ED6;&#x7684;SAPI&#x4E5F;&#x662F;&#x7C7B;&#x4F3C;&#x3002;</p>
+</blockquote>
+<p>PHP&#x5F00;&#x59CB;&#x6267;&#x884C;&#x8981;&#x7ECF;&#x8FC7;&#x4E24;&#x4E2A;&#x4E3B;&#x8981;&#x7684;&#x9636;&#x6BB5;&#xFF1A;&#x5904;&#x7406;&#x8BF7;&#x6C42;&#x4E4B;&#x524D;&#x7684;&#x5F00;&#x59CB;&#x9636;&#x6BB5;&#x548C;&#x8BF7;&#x6C42;&#x4E4B;&#x540E;&#x7684;&#x9636;&#x6BB5;&#x3002;&#x5F00;&#x59CB;&#x9636;&#x6BB5;&#x4E3B;&#x8981;&#x6709;&#x4E24;&#x4E2A;&#x8FC7;&#x7A0B;&#xFF1A;&#x7B2C;&#x4E00;&#x4E2A;&#x662F;&#x6A21;&#x5757;&#x521D;&#x59CB;&#x5316;&#x9636;&#x6BB5;&#xFF08;MINIT&#xFF09;,&#x5728;&#x6574;&#x4E2A;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E4B;&#x5185;&#x53EA;&#x8FDB;&#x884C;&#x4E00;&#x6B21;&#x3002;&#x7B2C;&#x4E8C;&#x4E2A;&#x8FC7;&#x7A0B;&#x662F;&#x6A21;&#x5757;&#x6FC0;&#x6D3B;&#x9636;&#x6BB5;&#xFF08;RINIT&#xFF09;,&#x53D1;&#x751F;&#x5728;&#x8BF7;&#x6C42;&#x9636;&#x6BB5;&#xFF0C;&#x6BCF;&#x6B21;&#x8BF7;&#x6C42;&#x4E4B;&#x524D;&#x90FD;&#x4F1A;&#x8FDB;&#x884C;&#x6A21;&#x5757;&#x6FC0;&#x6D3B;&#x3002;&#x4F8B;&#x5982;PHP&#x6CE8;&#x518C;&#x4E00;&#x4E9B;&#x6269;&#x5C55;&#x6A21;&#x5757;&#xFF0C;&#x5219;&#x5728;MINIT&#x9636;&#x6BB5;&#x4F1A;&#x56DE;&#x8C03;&#x6240;&#x6709;&#x6A21;&#x5757;&#x7684;MINIT&#x51FD;&#x6570;&#x3002;</p>
+<p>&#x8BF7;&#x6C42;&#x5230;&#x8FBE;&#x4E4B;&#x540E;PHP&#x521D;&#x59CB;&#x5316;&#x6267;&#x884C;&#x811A;&#x672C;&#x7684;&#x57FA;&#x672C;&#x73AF;&#x5883;&#xFF0C;&#x5305;&#x62EC;&#x4FDD;&#x5B58;&#x8FD0;&#x884C;&#x8FC7;&#x7A0B;&#x4E2D;&#x53D8;&#x91CF;&#x540D;&#x79F0;&#x3001;&#x503C;&#x5185;&#x5BB9;&#x7B26;&#x53F7;&#x8868;&#xFF0C;&#x6240;&#x6709;&#x7684;&#x51FD;&#x6570;&#x53CA;&#x7C7B;&#x7B49;&#x4FE1;&#x606F;&#x7684;&#x7B26;&#x53F7;&#x8868;&#x3002;&#x7136;&#x540E;PHP&#x4F1A;&#x8C03;&#x7528;&#x6240;&#x6709;RINIT&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x5404;&#x6A21;&#x5757;&#x4E5F;&#x4F1A;&#x6267;&#x884C;&#x4E00;&#x4E9B;&#x76F8;&#x5173;&#x64CD;&#x4F5C;&#x3002;</p>
+<p>&#x8BF7;&#x6C42;&#x5904;&#x7406;&#x5B8C;&#x6210;&#x540E;&#xFF0C;&#x6267;&#x884C;&#x5230;&#x811A;&#x672C;&#x672B;&#x5C3E;&#x6216;&#x662F;&#x8C03;&#x7528;die()/exit()&#x51FD;&#x6570;&#xFF0C;PHP&#x90FD;&#x5C06;&#x8FDB;&#x5165;&#x7ED3;&#x675F;&#x9636;&#x6BB5;&#x3002;&#x4E5F;&#x5206;&#x4E3A;&#x4E24;&#x4E2A;&#x73AF;&#x8282;&#xFF0C;&#x4E00;&#x4E2A;&#x8BF7;&#x6C42;&#x7ED3;&#x675F;&#x540E;&#x505C;&#x7528;&#x6A21;&#x5757;&#xFF08;RSHOUTDOWN,&#x5BF9;&#x5E94;RINIT&#xFF09;,&#x4E00;&#x4E2A;&#x5728;SAPI&#x751F;&#x547D;&#x5468;&#x671F;&#x7ED3;&#x675F;&#x65F6;&#x5173;&#x95ED;&#x6A21;&#x5757;&#xFF08;MSHUTDOWN, &#x5BF9;&#x5E94;MINIT&#xFF09;&#x3002;</p>
+<h2 id="&#x5355;&#x8FDB;&#x7A0B;SAPI&#x751F;&#x547D;&#x5468;&#x671F;"><a href="#&#x5355;&#x8FDB;&#x7A0B;SAPI&#x751F;&#x547D;&#x5468;&#x671F;" class="headerlink" title="&#x5355;&#x8FDB;&#x7A0B;SAPI&#x751F;&#x547D;&#x5468;&#x671F;"></a>&#x5355;&#x8FDB;&#x7A0B;SAPI&#x751F;&#x547D;&#x5468;&#x671F;</h2><p><img src="http://www.php-internals.com/images/book/chapt02/02-01-01-cgi-lift-cycle.png" alt="sapi"></p>
+<h3 id="&#x542F;&#x52A8;"><a href="#&#x542F;&#x52A8;" class="headerlink" title="&#x542F;&#x52A8;"></a>&#x542F;&#x52A8;</h3><p>&#x5728;&#x8C03;&#x7528;&#x6BCF;&#x4E2A;&#x6A21;&#x5757;&#x7684;&#x6A21;&#x5757;&#x521D;&#x59CB;&#x5316;&#x524D;&#xFF0C;&#x4F1A;&#x6709;&#x4E00;&#x4E2A;&#x521D;&#x59CB;&#x5316;&#x7684;&#x8FC7;&#x7A0B;&#xFF0C;&#x5305;&#x62EC;&#x4EE5;&#x4E0B;&#xFF1A;</p>
+<ul>
+<li>&#x521D;&#x59CB;&#x5316;&#x82E5;&#x5E72;&#x4E2A;&#x53D8;&#x91CF;</li>
+<li>&#x521D;&#x59CB;&#x5316;&#x82E5;&#x5E72;&#x5E38;&#x91CF;</li>
+<li>&#x521D;&#x59CB;&#x5316;Zend&#x5F15;&#x64CE;&#x548C;&#x6838;&#x5FC3;&#x7EC4;&#x4EF6;</li>
+<li>&#x89E3;&#x6790;php.ini</li>
+<li>&#x5168;&#x5C40;&#x64CD;&#x4F5C;&#x51FD;&#x6570;&#x7684;&#x521D;&#x59CB;&#x5316;</li>
+<li>&#x521D;&#x59CB;&#x5316;&#x9759;&#x6001;&#x6784;&#x9020;&#x7684;&#x6A21;&#x5757;&#x548C;&#x5171;&#x4EAB;&#x6A21;&#x5757;&#xFF08;MINIT&#xFF09;</li>
+<li>&#x7981;&#x7528;&#x51FD;&#x6570;&#x548C;&#x7C7B;</li>
+</ul>
+<h3 id="ACTIVATION"><a href="#ACTIVATION" class="headerlink" title="ACTIVATION"></a>ACTIVATION</h3><p>&#x8C03;&#x7528;php_request_startup&#x505A;&#x8BF7;&#x6C42;&#x521D;&#x59CB;&#x5316;&#x64CD;&#x4F5C;&#xFF0C;&#x8FD8;&#x6709;&#x5176;&#x4ED6;&#x7684;&#x64CD;&#x4F5C;&#xFF1A;</p>
+<ul>
+<li><p>&#x6FC0;&#x6D3B;Zend&#x5F15;&#x64CE;</p>
+<ul>
+<li>gc_reset&#x51FD;&#x6570;&#x6765;&#x91CD;&#x7F6E;&#x5783;&#x573E;&#x6536;&#x96C6;&#x673A;&#x5236;</li>
+<li>init_complier&#x521D;&#x59CB;&#x5316;&#x7F16;&#x8BD1;&#x5668;</li>
+<li>init_executor&#x521D;&#x59CB;&#x5316;&#x4E2D;&#x95F4;&#x4EE3;&#x7801;&#x7684;&#x6267;&#x884C;&#x8FC7;&#x7A0B;</li>
+</ul>
+</li>
+<li><p>&#x6FC0;&#x6D3B;SAPI</p>
+</li>
+<li><p>&#x73AF;&#x5883;&#x521D;&#x59CB;&#x5316;</p>
+<ul>
+<li>$_POST&#x3001;$_GET&#x3001;$_COOKIE&#x3001;$_SERVER&#x3001;$_ENV&#x3001;$_FILES&#x7B49;</li>
+</ul>
+</li>
+<li>&#x6A21;&#x5757;&#x8BF7;&#x6C42;&#x521D;&#x59CB;&#x5316;</li>
+</ul>
+<h3 id="&#x8FD0;&#x884C;"><a href="#&#x8FD0;&#x884C;" class="headerlink" title="&#x8FD0;&#x884C;"></a>&#x8FD0;&#x884C;</h3><p>php_execute_script&#x51FD;&#x6570;&#x5305;&#x542B;&#x4E86;&#x8FD0;&#x884C;PHP&#x811A;&#x672C;&#x7684;&#x5168;&#x90E8;&#x8FC7;&#x7A0B;</p>
+<h3 id="DEACTIVITION"><a href="#DEACTIVITION" class="headerlink" title="DEACTIVITION"></a>DEACTIVITION</h3><p>&#x5173;&#x95ED;&#x8BF7;&#x6C42;&#x7684;&#x8FC7;&#x7A0B;&#x662F;&#x82E5;&#x5E72;&#x4E2A;&#x5173;&#x95ED;&#x64CD;&#x4F5C;&#x7684;&#x96C6;&#x5408;&#xFF0C;&#x5B58;&#x5728;&#x4E8E;php_request_shutdown&#x51FD;&#x6570;&#x3002;</p>
+<h3 id="&#x7ED3;&#x675F;"><a href="#&#x7ED3;&#x675F;" class="headerlink" title="&#x7ED3;&#x675F;"></a>&#x7ED3;&#x675F;</h3><ul>
+<li>flush</li>
+<li>&#x5173;&#x95ED;zend&#x5F15;&#x64CE;</li>
+</ul>
+<h2 id="&#x591A;&#x8FDB;&#x7A0B;SAPI&#x751F;&#x547D;&#x5468;&#x671F;"><a href="#&#x591A;&#x8FDB;&#x7A0B;SAPI&#x751F;&#x547D;&#x5468;&#x671F;" class="headerlink" title="&#x591A;&#x8FDB;&#x7A0B;SAPI&#x751F;&#x547D;&#x5468;&#x671F;"></a>&#x591A;&#x8FDB;&#x7A0B;SAPI&#x751F;&#x547D;&#x5468;&#x671F;</h2><p>&#x4EE5;Apache&#x4E3A;&#x4F8B;&#xFF0C;Apache&#x542F;&#x52A8;&#x540E;&#x4F1A;fork&#x591A;&#x4E2A;&#x5B50;&#x8FDB;&#x7A0B;&#xFF0C;&#x8FDB;&#x7A0B;&#x95F4;&#x5185;&#x5B58;&#x72EC;&#x7ACB;&#xFF0C;&#x6BCF;&#x4E2A;&#x5B50;&#x8FDB;&#x7A0B;&#x90FD;&#x4F1A;&#x7ECF;&#x8FC7;&#x5F00;&#x59CB;&#x548C;&#x7ED3;&#x675F;&#x73AF;&#x8282;&#xFF0C;&#x6240;&#x4EE5;&#x5728;&#x6574;&#x4E2A;&#x751F;&#x547D;&#x5468;&#x671F;&#x4E2D;&#x53EF;&#x80FD;&#x4F1A;&#x6709;&#x591A;&#x4E2A;&#x8BF7;&#x6C42;&#x3002;&#x5982;&#x4E0B;&#x56FE;&#x6240;&#x793A;&#xFF1A;<br><img src="http://www.php-internals.com/images/book/chapt02/02-01-02-multiprocess-life-cycle.png" alt="multi"></p>
+<h2 id="&#x591A;&#x7EBF;&#x7A0B;&#x7684;SAPI&#x751F;&#x547D;&#x5468;&#x671F;"><a href="#&#x591A;&#x7EBF;&#x7A0B;&#x7684;SAPI&#x751F;&#x547D;&#x5468;&#x671F;" class="headerlink" title="&#x591A;&#x7EBF;&#x7A0B;&#x7684;SAPI&#x751F;&#x547D;&#x5468;&#x671F;"></a>&#x591A;&#x7EBF;&#x7A0B;&#x7684;SAPI&#x751F;&#x547D;&#x5468;&#x671F;</h2><p>&#x6574;&#x4E2A;&#x8FDB;&#x7A0B;&#x7684;&#x751F;&#x547D;&#x5468;&#x671F;&#x5185;&#x4F1A;&#x5E76;&#x884C;&#x7684;&#x91CD;&#x590D;&#x7740; &#x8BF7;&#x6C42;&#x5F00;&#x59CB;-&#x8BF7;&#x6C42;&#x5173;&#x95ED;&#x73AF;&#x8282;&#xFF0C;&#x5982;&#x4E0B;&#x56FE;&#xFF1A;<br><img src="http://www.php-internals.com/images/book/chapt02/02-01-013-multithreaded-lift-cycle.png" alt="thread"></p>
+<h2 id="Zend&#x5F15;&#x64CE;"><a href="#Zend&#x5F15;&#x64CE;" class="headerlink" title="Zend&#x5F15;&#x64CE;"></a>Zend&#x5F15;&#x64CE;</h2><p>Zend&#x5F15;&#x64CE;&#x662F;PHP&#x5B9E;&#x73B0;&#x7684;&#x6838;&#x5FC3;&#xFF0C;&#x63D0;&#x4F9B;&#x4E86;&#x8BED;&#x8A00;&#x5B9E;&#x73B0;&#x4E0A;&#x7684;&#x57FA;&#x7840;&#x8BBE;&#x65BD;&#x3002;&#x5982;&#xFF1A;&#x8BED;&#x6CD5;&#x5B9E;&#x73B0;&#x3001;&#x811A;&#x672C;&#x7684;&#x7F16;&#x8BD1;&#x8FD0;&#x884C;&#x73AF;&#x5883;&#x3001;&#x6269;&#x5C55;&#x673A;&#x5236;&#x3001;&#x5185;&#x5B58;&#x7BA1;&#x7406;&#x3002;&#x5F88;&#x591A;PHP&#x6269;&#x5C55;&#x4E5F;&#x662F;&#x4F7F;&#x7528;&#x7684;ZendAPI&#x3002;</p>
+<h2 id="&#x53C2;&#x8003;&#x8D44;&#x6599;"><a href="#&#x53C2;&#x8003;&#x8D44;&#x6599;" class="headerlink" title="&#x53C2;&#x8003;&#x8D44;&#x6599;"></a>&#x53C2;&#x8003;&#x8D44;&#x6599;</h2><ul>
+<li><a href="http://www.laruence.com/2008/08/11/147.html" target="_blank" rel="external">http://www.laruence.com/2008/08/11/147.html</a> &#x98CE;&#x96EA;&#x4E4B;&#x9685;</li>
+<li><a href="https://www.kancloud.cn/digest/php-src/136264" target="_blank" rel="external">https://www.kancloud.cn/digest/php-src/136264</a> PHPer&#x8FDB;&#x9636;</li>
+<li><a href="http://www.php-internals.com/book/" target="_blank" rel="external">http://www.php-internals.com/book/</a> &#x6DF1;&#x5165;&#x7406;&#x89E3;PHP&#x5185;&#x6838;</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+            <a href="/tags/CGI/" rel="tag"># CGI</a>
+          
+            <a href="/tags/PHP-FPM/" rel="tag"># PHP-FPM</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/18/MySql的那些事儿/" rel="next" title="MySql的那些事儿">
+                <i class="fa fa-chevron-left"></i> MySql的那些事儿
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/20/深入理解PHP-一/"
+           data-title="深入理解PHP(一)" data-url="http://yoursite.com/2017/02/20/深入理解PHP-一/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars3.githubusercontent.com/u/9361738?v=3&s=460"
+               alt="Wicky" />
+          <p class="site-author-name" itemprop="name">Wicky</p>
+          <p class="site-description motion-element" itemprop="description">Life comes down to a simple choice.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/WickyLeo" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/profile.php?id=100010357783260" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2242412480?topnav=1&wvr=5#1352164624490" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行模式及生命周期"><span class="nav-number">1.</span> <span class="nav-text">运行模式及生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP运行模式"><span class="nav-number">1.1.</span> <span class="nav-text">PHP运行模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始和结束"><span class="nav-number">2.</span> <span class="nav-text">开始和结束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单进程SAPI生命周期"><span class="nav-number">3.</span> <span class="nav-text">单进程SAPI生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-number">3.1.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ACTIVATION"><span class="nav-number">3.2.</span> <span class="nav-text">ACTIVATION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行"><span class="nav-number">3.3.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DEACTIVITION"><span class="nav-number">3.4.</span> <span class="nav-text">DEACTIVITION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结束"><span class="nav-number">3.5.</span> <span class="nav-text">结束</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多进程SAPI生命周期"><span class="nav-number">4.</span> <span class="nav-text">多进程SAPI生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程的SAPI生命周期"><span class="nav-number">5.</span> <span class="nav-text">多线程的SAPI生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zend引擎"><span class="nav-number">6.</span> <span class="nav-text">Zend引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wicky</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wickyleo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
